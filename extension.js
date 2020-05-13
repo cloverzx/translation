@@ -153,6 +153,5 @@ function sets(type,data,desc){
 
 // }
 module.exports = {
-	activate,
-	deactivate
+	activate
 }
