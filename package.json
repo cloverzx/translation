@@ -155,39 +155,6 @@
 				}
 			]
 		}
-		// 此处代码考虑是否放入设置,待定功能
-		// "configuration": {
-		// 	"title": "translation",
-		// 	"properties": {
-		// 		"translation.mode": {
-		// 			"type": "string",
-		// 			"default": "5",
-		// 			"enum":["1","2","3","4","5","98","99"],
-		// 			"enumDescriptions":[
-		// 				"大驼峰模式",
-		// 				"小驼峰模式",
-		// 				"全小写模式",
-		// 				"全大写模式",
-		// 				"单词分隔模式",
-		// 				"拼音首字母模式",
-		// 				"全拼模式"
-		// 			],
-		// 			"description": "翻译替换的模式：1 - 大驼峰模式、2 - 小驼峰模式、3 - 全小写模式、4 - 全大写模式、5 - 单词分隔模式、98 - 拼音首字母模式、99 - 全拼模式",
-		// 			"markdownDescription":""
-		// 		},
-		// 		"translation.source": {
-		// 			"type": "string",
-		// 			"default": "baidu",
-		// 			"enum":["baidu","youdao","google"],
-		// 			"enumDescriptions":[
-		// 				"百度翻译",
-		// 				"有道翻译",
-		// 				"谷歌翻译"
-		// 			],
-		// 			"description": "翻译源服务器：baidu - 百度、youdao - 有道、google - 谷歌"
-		// 		}
-		// 	}
-		// }
 	},
 	"extensionDependencies": [
 		"plugin-manager"
