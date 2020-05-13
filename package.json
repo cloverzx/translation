@@ -31,15 +31,15 @@
 			},
 			{
 				"command": "extension.setbaidu",
-				"title": "setBaidu 设置成百度"
+				"title": "setBaidu 百度"
 			},
 			{
 				"command": "extension.setgoogle",
-				"title": "setGoogle 设置成谷歌"
+				"title": "setGoogle 谷歌"
 			},
 			{
 				"command": "extension.setyoudao",
-				"title": "setYoudao 设置成有道"
+				"title": "setYoudao 有道"
 			},
 			{
 				"command": "extension.mode1",
@@ -59,7 +59,7 @@
 			},
 			{
 				"command": "extension.mode5",
-				"title": "5 单词分隔"
+				"title": "5 原始"
 			},
 			{
 				"command": "extension.mode99",
@@ -81,13 +81,13 @@
 				{
 					"id":"setting",
 					"group": "copy",
-					"title": "翻译模式",
+					"title": "模式切换",
 					"when": "editorTextFocus && !activeEditor.readonly"
 				},
 				{
 					"id":"mode",
 					"group": "copy",
-					"title": "翻译源(仅翻译模式)",
+					"title": "翻译源",
 					"when": "editorTextFocus && !activeEditor.readonly"
 				},
 				{
@@ -117,7 +117,7 @@
 				{
 					"command": "extension.mode5",
 					"group": "setting@2",
-					"title": "中英互翻模式(单词分隔)",
+					"title": "中英互翻模式(原始)",
 					"when": "editorTextFocus && !activeEditor.readonly"
 				},
 				{
@@ -155,6 +155,39 @@
 				}
 			]
 		}
+		// 此处代码考虑是否放入设置,待定功能
+		// "configuration": {
+		// 	"title": "translation",
+		// 	"properties": {
+		// 		"translation.mode": {
+		// 			"type": "string",
+		// 			"default": "5",
+		// 			"enum":["1","2","3","4","5","98","99"],
+		// 			"enumDescriptions":[
+		// 				"大驼峰模式",
+		// 				"小驼峰模式",
+		// 				"全小写模式",
+		// 				"全大写模式",
+		// 				"单词分隔模式",
+		// 				"拼音首字母模式",
+		// 				"全拼模式"
+		// 			],
+		// 			"description": "翻译替换的模式：1 - 大驼峰模式、2 - 小驼峰模式、3 - 全小写模式、4 - 全大写模式、5 - 单词分隔模式、98 - 拼音首字母模式、99 - 全拼模式",
+		// 			"markdownDescription":""
+		// 		},
+		// 		"translation.source": {
+		// 			"type": "string",
+		// 			"default": "baidu",
+		// 			"enum":["baidu","youdao","google"],
+		// 			"enumDescriptions":[
+		// 				"百度翻译",
+		// 				"有道翻译",
+		// 				"谷歌翻译"
+		// 			],
+		// 			"description": "翻译源服务器：baidu - 百度、youdao - 有道、google - 谷歌"
+		// 		}
+		// 	}
+		// }
 	},
 	"extensionDependencies": [
 		"plugin-manager"

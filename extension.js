@@ -3,8 +3,8 @@ const {
 	youdao,
 	baidu,
 	google
-} = require("translation.js");
-const pinyin = require("chinese-to-pinyin");
+} = require("translation.js");//引入翻译库
+const pinyin = require("chinese-to-pinyin");//引入拼音库
 
 function activate(context) {
 	let replace = hx.commands.registerCommand('extension.replace', () => {
@@ -21,7 +21,9 @@ function activate(context) {
 					})
 			}
 			if (word.length > 0) {
+				//1 - 大驼峰、2 - 小驼峰、3 - 全小写、4 - 全大写、5 - 原始、98 - 拼音首字母、99 - 拼音全拼
 				if (["1", "2", "3", "4", "5"].includes(mode)) {
+					//翻译源的配置和处理
 					let source = config.get("source", false);
 					let fy = baidu;
 					if (!source) {
@@ -39,6 +41,7 @@ function activate(context) {
 						.then(result => {
 							let newWord = result.result[0]
 							if(newWord.length > 0){
+								//不同翻译模式,进行不同的处理
 								if(mode === "1"){
 									let k = words(newWord,1)
 									newWord = k.replace(k[0],k[0].toUpperCase());
@@ -53,12 +56,14 @@ function activate(context) {
 								else if(mode === "5"){
 									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
 								}
+								//执行替换选中词
 								editor.edit(editBuilder => {
 									editBuilder.replace(selection, newWord)
 								});
 							}
 						})
 				} else if (["99", "98"].includes(mode)) {
+					//不同的拼音模式处理
 					let condition = {
 						"removeTone": true,
 						"removeSpace": true
@@ -66,6 +71,7 @@ function activate(context) {
 					if (mode === "98") {
 						condition["firstCharacter"] = true
 					}
+					//执行替换选中词
 					editor.edit(editBuilder => {
 						editBuilder.replace(selection, pinyin(word, condition))
 					});
@@ -78,7 +84,7 @@ function activate(context) {
 		sets("mode", "98","切换到拼音首字母模式成功!")
 	});
 	let mode99 = hx.commands.registerCommand('extension.mode99', () => {
-		sets("mode", "99","切换到全拼模式成功!")
+		sets("mode", "99","切换到拼音全拼模式成功!")
 	});
 	let mode1 = hx.commands.registerCommand('extension.mode1', () => {
 		sets("mode", "1","切换到大驼峰模式!")
@@ -93,20 +99,25 @@ function activate(context) {
 		sets("mode", "4","切换到全大写模式成功!")
 	});
 	let mode5 = hx.commands.registerCommand('extension.mode5', () => {
-		sets("mode", "5","切换到单词分隔模式成功!")
+		sets("mode", "5","切换到原始模式成功!")
 	});
 	let setbaidu = hx.commands.registerCommand('extension.setbaidu', () => {
-		sets("source", "baidu","切换到百度翻译成功,仅限于翻译模式!")
+		sets("source", "baidu","切换到百度翻译源成功!")
 	});
 	let setyoudao = hx.commands.registerCommand('extension.setyoudao', () => {
-		sets("source", "youdao","切换到有道翻译成功,仅限于翻译模式!")
+		sets("source", "youdao","切换到有道翻译源成功!")
 	});
 	let setgoogle = hx.commands.registerCommand('extension.setgoogle', () => {
-		sets("mode", "google","切换到谷歌翻译成功,仅限于翻译模式!")
+		sets("mode", "google","切换到谷歌翻译源成功!")
 	});
 	// context.subscriptions.push(replace);
 }
-
+/**
+ * 去除单词空格,根据参数处理每个单词首字母
+ * @description 去除单词空格,根据参数处理每个单词首字母
+ * @param {String} str 原始字符串
+ * @param {Number} type 模式1:首字母均大写2:不做处理
+ */
 function words(str,type){
 	strs=str.split(" ")
 	let k = ""
@@ -121,6 +132,13 @@ function words(str,type){
 	return k
 }
 
+/**
+ * 设置配置,给予反馈
+ * @description 设置配置,给予反馈
+ * @param {Number} type 
+ * @param {String} data
+ * @param {String} desc 文字信息 
+ */
 function sets(type,data,desc){
 	hx.workspace.getConfiguration().update(type, data)
 		.then(() => {
@@ -131,9 +149,9 @@ function sets(type,data,desc){
 		});
 }
 
-function deactivate() {
+// function deactivate() {
 
-}
+// }
 module.exports = {
 	activate,
 	deactivate
