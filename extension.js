@@ -108,7 +108,7 @@ function activate(context) {
 		sets("source", "youdao","切换到有道翻译源成功!")
 	});
 	let setgoogle = hx.commands.registerCommand('extension.setgoogle', () => {
-		sets("mode", "google","切换到谷歌翻译源成功!")
+		sets("source", "google","切换到谷歌翻译源成功!")
 	});
 	// context.subscriptions.push(replace);
 }
