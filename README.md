@@ -8,7 +8,7 @@
 ## 使用教程
 
   >1. 确保您的hbuildX在2.7.0版本以上  
-  >2. 下载translation,解压到hbuildX的安装目录下plugin目录下,重新启动您的hbuildX,即可使用  
+  >2. 下载translation(在releases里),解压到hbuildX的安装目录下plugin目录下,重新启动您的hbuildX,即可使用  
 若hbuildX官方开放插件市场,会第一时间上传  
   >3. 右键,设置模式和翻译源,即可使用  
 
