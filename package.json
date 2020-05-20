@@ -20,6 +20,8 @@
 		"onCommand:extension.mode3",
 		"onCommand:extension.mode4",
 		"onCommand:extension.mode5",
+		"onCommand:extension.mode6",
+		"onCommand:extension.mode7",
 		"onCommand:extension.mode99",
 		"onCommand:extension.mode98"
 	],
@@ -59,7 +61,15 @@
 			},
 			{
 				"command": "extension.mode5",
-				"title": "5 原始"
+				"title": "5 空格分隔"
+			},
+			{
+				"command": "extension.mode6",
+				"title": "6 横线分隔"
+			},
+			{
+				"command": "extension.mode7",
+				"title": "7 下划线分隔"
 			},
 			{
 				"command": "extension.mode99",
@@ -81,74 +91,95 @@
 				{
 					"id":"setting",
 					"group": "copy",
-					"title": "模式切换",
-					"when": "editorTextFocus && !activeEditor.readonly"
-				},
-				{
-					"id":"mode",
-					"group": "copy",
-					"title": "翻译源",
+					"title": "模式配置",
 					"when": "editorTextFocus && !activeEditor.readonly"
 				},
 				{
 					"command": "extension.mode1",
 					"group": "setting@2",
-					"title": "中英互翻模式(大驼峰)",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"title": "大驼峰",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '1'"
 				},
 				{
 					"command": "extension.mode2",
 					"group": "setting@2",
-					"title": "中英互翻模式(小驼峰)",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"title": "小驼峰",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '2'"
 				},
 				{
 					"command": "extension.mode3",
 					"group": "setting@2",
-					"title": "中英互翻模式(全小写)",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"title": "全小写",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '3'"
 				},
 				{
 					"command": "extension.mode4",
 					"group": "setting@2",
-					"title": "中英互翻模式(全大写)",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"title": "全大写",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '4'"
 				},
 				{
 					"command": "extension.mode5",
 					"group": "setting@2",
-					"title": "中英互翻模式(原始)",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"title": "空格分隔单词",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '5'"
 				},
 				{
-					"command": "extension.setgoogle",
-					"group": "mode@3",
-					"title": "谷歌",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"command": "extension.mode6",
+					"group": "setting@2",
+					"title": "横线分隔单词",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '6'"
 				},
 				{
-					"command": "extension.setbaidu",
-					"group": "mode@3",
-					"title": "百度",
-					"when": "editorTextFocus && !activeEditor.readonly"
-				},
-				{
-					"command": "extension.setyoudao",
-					"group": "mode@1",
-					"title": "有道",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"command": "extension.mode7",
+					"group": "setting@2",
+					"title": "下划线分隔单词",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '7'"
 				},
 				{
 					"command": "extension.mode99",
 					"group": "setting@1",
-					"title": "拼音全拼模式",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"title": "拼音全拼",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '99'"
 				},
 				{
 					"command": "extension.mode98",
 					"group": "setting@1",
-					"title": "拼音首字母模式",
-					"when": "editorTextFocus && !activeEditor.readonly"
+					"title": "拼音首字母",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == '98'"
+				},
+				{
+					"group": "setting@2"
+				},
+				{
+					"command": "extension.setgoogle",
+					"group": "setting@2",
+					"title": "谷歌",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.source == 'google'"
+				},
+				{
+					"command": "extension.setbaidu",
+					"group": "setting@2",
+					"title": "百度",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == 'baidu'"
+				},
+				{
+					"command": "extension.setyoudao",
+					"group": "setting@2",
+					"title": "有道",
+					"when": "editorTextFocus && !activeEditor.readonly",
+					"checked":"config.mode == 'youdao'"
 				},
 				{
 					"group": "copy"

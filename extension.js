@@ -22,7 +22,7 @@ function activate(context) {
 			}
 			if (word.length > 0) {
 				//1 - 大驼峰、2 - 小驼峰、3 - 全小写、4 - 全大写、5 - 原始、98 - 拼音首字母、99 - 拼音全拼
-				if (["1", "2", "3", "4", "5"].includes(mode)) {
+				if (["1", "2", "3", "4", "5","6","7"].includes(mode)) {
 					//翻译源的配置和处理
 					let source = config.get("source", false);
 					let fy = baidu;
@@ -56,6 +56,14 @@ function activate(context) {
 								else if(mode === "5"){
 									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
 								}
+								else if(mode === "6"){
+									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
+									newWord = newWord.replace(" ","-");
+								}
+								else if(mode === "7"){
+									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
+									newWord = newWord.replace(" ","_");
+								}
 								//执行替换选中词
 								editor.edit(editBuilder => {
 									editBuilder.replace(selection, newWord)
@@ -87,7 +95,7 @@ function activate(context) {
 		sets("mode", "99","切换到拼音全拼模式成功!")
 	});
 	let mode1 = hx.commands.registerCommand('extension.mode1', () => {
-		sets("mode", "1","切换到大驼峰模式!")
+		sets("mode", "1","切换到大驼峰模式成功!")
 	});
 	let mode2 = hx.commands.registerCommand('extension.mode2', () => {
 		sets("mode", "2","切换到小驼峰模式成功!")
@@ -99,7 +107,13 @@ function activate(context) {
 		sets("mode", "4","切换到全大写模式成功!")
 	});
 	let mode5 = hx.commands.registerCommand('extension.mode5', () => {
-		sets("mode", "5","切换到原始模式成功!")
+		sets("mode", "5","切换到空格分隔模式成功!")
+	});
+	let mode6 = hx.commands.registerCommand('extension.mode6', () => {
+		sets("mode", "6","切换到横线分隔模式成功!")
+	});
+	let mode7 = hx.commands.registerCommand('extension.mode7', () => {
+		sets("mode", "7","切换到下划线分隔模式成功!")
 	});
 	let setbaidu = hx.commands.registerCommand('extension.setbaidu', () => {
 		sets("source", "baidu","切换到百度翻译源成功!")
