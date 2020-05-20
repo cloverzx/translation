@@ -1,7 +1,7 @@
 {
 	"name": "translation",
 	"description": "plug-in",
-	"version": "0.1.0",
+	"version": "0.2.1",
 	"publisher": "cloverX",
 	"engines": {
 		"HBuilderX": "^2.7.0"
