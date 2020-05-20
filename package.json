@@ -172,14 +172,14 @@
 					"group": "setting@2",
 					"title": "百度",
 					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == 'baidu'"
+					"checked":"config.source == 'baidu'"
 				},
 				{
 					"command": "extension.setyoudao",
 					"group": "setting@2",
 					"title": "有道",
 					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == 'youdao'"
+					"checked":"config.source == 'youdao'"
 				},
 				{
 					"group": "copy"

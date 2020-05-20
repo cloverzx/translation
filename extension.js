@@ -58,11 +58,11 @@ function activate(context) {
 								}
 								else if(mode === "6"){
 									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
-									newWord = newWord.replace(" ","-");
+									newWord = newWord.replace(/ /g,"-");
 								}
 								else if(mode === "7"){
 									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
-									newWord = newWord.replace(" ","_");
+									newWord = newWord.replace(/ /g,"_");
 								}
 								//执行替换选中词
 								editor.edit(editBuilder => {
