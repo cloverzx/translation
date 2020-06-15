@@ -3,147 +3,132 @@ const {
 	youdao,
 	baidu,
 	google
-} = require("translation.js");//引入翻译库
-const pinyin = require("chinese-to-pinyin");//引入拼音库
+} = require("translation.js"); //引入翻译库
+const pinyin = require("chinese-to-pinyin"); //引入拼音库
 
 function activate(context) {
-	let replace = hx.commands.registerCommand('extension.replace', () => {
+	let replace = hx.commands.registerCommand('extension.translatereplace', () => {
+		const dealWith = async (word, fy) => {
+			const l1 = await new Promise((resolve, reject) => {
+				fy.translate(word).then(result => {
+					resolve(words(result.result[0]))
+				})
+			})
+			const l2 = await new Promise((resolve, reject) => {
+				resolve([{
+					label: pinyin(word, {
+						"removeTone": true,
+						"removeSpace": true
+					}),
+					description: '拼音'
+				}, {
+					label: pinyin(word, {
+						"removeTone": true,
+						"removeSpace": true,
+						"firstCharacter": true
+					}),
+					description: '拼音首字母'
+				}])
+			})
+			return [...l1, ...l2]
+		}
+		const perform = (listArray,editor,selection)=>{
+			const pickResult = hx.window.showQuickPick(listArray, {
+				placeHolder: '选择替换'
+			});
+			pickResult.then(res => {
+				if (!res) {
+					return;
+				}
+				editor.edit(editBuilder=>{
+					editBuilder.replace(selection,res.label)
+				})
+			})
+		}
 		let editorPromise = hx.window.getActiveTextEditor();
 		editorPromise.then((editor) => {
 			let selection = editor.selection;
 			let word = editor.document.getText(selection);
 			let config = hx.workspace.getConfiguration();
-			let mode = config.get("mode", false);
-			if (!mode) {
-				config.update("mode", "5")
-					.then(() => {
-						mode = "5"
-					})
+			let source = config.get("source", false);
+			let fy = google;
+			let listArray = []
+			if (source === "baidu") {
+				fy = baidu;
+			} else if (source === "google") {
+				fy = google;
+			} else if (source === "youdao") {
+				fy = youdao;
+			} else {
+				config.update("source", "google")
+				fy = google
 			}
 			if (word.length > 0) {
-				//1 - 大驼峰、2 - 小驼峰、3 - 全小写、4 - 全大写、5 - 原始、98 - 拼音首字母、99 - 拼音全拼
-				if (["1", "2", "3", "4", "5","6","7"].includes(mode)) {
-					//翻译源的配置和处理
-					let source = config.get("source", false);
-					let fy = baidu;
-					if (!source) {
-						source = "baidu"
-						config.update("source", "baidu")
-					}
-					if (source === "baidu") {
-						fy = baidu;
-					} else if (source === "google") {
-						fy = google;
-					} else if (source === "youdao") {
-						fy = youdao;
-					}
-					fy.translate(word)
-						.then(result => {
-							let newWord = result.result[0]
-							if(newWord.length > 0){
-								//不同翻译模式,进行不同的处理
-								if(mode === "1"){
-									let k = words(newWord,1)
-									newWord = k.replace(k[0],k[0].toUpperCase());
-								}else if(mode === "2"){
-									let k = words(newWord,1)
-									newWord = k.replace(k[0],k[0].toLowerCase());
-								}else if(mode === "3"){
-									newWord = words(newWord,2).toLowerCase()
-								}else if(mode === "4"){
-									newWord = words(newWord,2).toUpperCase()
-								}
-								else if(mode === "5"){
-									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
-								}
-								else if(mode === "6"){
-									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
-									newWord = newWord.replace(/ /g,"-");
-								}
-								else if(mode === "7"){
-									newWord = newWord.replace(newWord[0],newWord[0].toLowerCase());
-									newWord = newWord.replace(/ /g,"_");
-								}
-								//执行替换选中词
-								editor.edit(editBuilder => {
-									editBuilder.replace(selection, newWord)
-								});
-							}
+				google.detect(word).then(lang => {
+					if (lang === 'en') {
+						fy.translate(word).then(result => {
+							listArray = [{
+								label: result.result[0],
+								description: '中文翻译'
+							}]
+							perform(listArray,editor,selection)
 						})
-				} else if (["99", "98"].includes(mode)) {
-					//不同的拼音模式处理
-					let condition = {
-						"removeTone": true,
-						"removeSpace": true
+					} else if (['zh', 'zh-CN', 'zh-TW'].includes(lang)) {
+						dealWith(word, fy).then(res => {
+							perform(res,editor,selection)
+						})
+					} else {
+						hx.window.showErrorMessage('仅支持中文和英文!');
 					}
-					if (mode === "98") {
-						condition["firstCharacter"] = true
-					}
-					//执行替换选中词
-					editor.edit(editBuilder => {
-						editBuilder.replace(selection, pinyin(word, condition))
-					});
-
-				}
+				})
+			} else {
+				hx.window.showErrorMessage('未选取内容!');
 			}
 		})
 	});
-	let mode98 = hx.commands.registerCommand('extension.mode98', () => {
-		sets("mode", "98","切换到拼音首字母模式成功!")
-	});
-	let mode99 = hx.commands.registerCommand('extension.mode99', () => {
-		sets("mode", "99","切换到拼音全拼模式成功!")
-	});
-	let mode1 = hx.commands.registerCommand('extension.mode1', () => {
-		sets("mode", "1","切换到大驼峰模式成功!")
-	});
-	let mode2 = hx.commands.registerCommand('extension.mode2', () => {
-		sets("mode", "2","切换到小驼峰模式成功!")
-	});
-	let mode3 = hx.commands.registerCommand('extension.mode3', () => {
-		sets("mode", "3","切换到全小写模式成功!")
-	});
-	let mode4 = hx.commands.registerCommand('extension.mode4', () => {
-		sets("mode", "4","切换到全大写模式成功!")
-	});
-	let mode5 = hx.commands.registerCommand('extension.mode5', () => {
-		sets("mode", "5","切换到空格分隔模式成功!")
-	});
-	let mode6 = hx.commands.registerCommand('extension.mode6', () => {
-		sets("mode", "6","切换到横线分隔模式成功!")
-	});
-	let mode7 = hx.commands.registerCommand('extension.mode7', () => {
-		sets("mode", "7","切换到下划线分隔模式成功!")
-	});
 	let setbaidu = hx.commands.registerCommand('extension.setbaidu', () => {
-		sets("source", "baidu","切换到百度翻译源成功!")
+		sets("source", "baidu", "切换到百度翻译源成功!")
 	});
 	let setyoudao = hx.commands.registerCommand('extension.setyoudao', () => {
-		sets("source", "youdao","切换到有道翻译源成功!")
+		sets("source", "youdao", "切换到有道翻译源成功!")
 	});
 	let setgoogle = hx.commands.registerCommand('extension.setgoogle', () => {
-		sets("source", "google","切换到谷歌翻译源成功!")
+		sets("source", "google", "切换到谷歌翻译源成功!")
 	});
-	// context.subscriptions.push(replace);
 }
-/**
- * 去除单词空格,根据参数处理每个单词首字母
- * @description 去除单词空格,根据参数处理每个单词首字母
- * @param {String} str 原始字符串
- * @param {Number} type 模式1:首字母均大写2:不做处理
- */
-function words(str,type){
-	strs=str.split(" ")
-	let k = ""
-	for (i=0;i<strs.length ;i++ )
-	{
-		if(type === 1){
-			k += strs[i].replace(strs[i][0],strs[i][0].toUpperCase())
-		}else if(type === 2){
-			k += strs[i]
-		}
+
+function words(str) {
+	strs = str.split(" ")
+	if (strs.length > 1) {
+		let [k1, k2, k3, k4, k5, k6, k7] = ['', '', '', '', '', '', '']
+		let b = ['大驼峰', '全小写', '全大写', '小驼峰', '空格连接', '-连接', '_连接']
+		strs.map((data, i) => {
+			let kkk = strs[i].toLowerCase()
+			k2 += kkk
+			k1 += kkk.replace(kkk[0], kkk[0].toUpperCase())
+			k5 = (i + 1 < strs.length) ? k5 + kkk + " " : k5 + kkk
+			k6 = (i + 1 < strs.length) ? k6 + kkk + " " : k6 + kkk
+			k7 = (i + 1 < strs.length) ? k7 + kkk + " " : k7 + kkk
+		})
+		k3 = k2.toUpperCase()
+		k4 = k1.replace(k1[0], k1[0].toLowerCase())
+		k6 = k6.replace(/ /g, '-')
+		k7 = k7.replace(/ /g, '_')
+		return [k1, k2, k3, k4, k5, k6, k7].map((data, i) => ({
+			label: data,
+			description: b[i]
+		}))
+	} else {
+		let [k1, k2, k3] = ['', '', '']
+		let b = ['小驼峰', '全大写', '大驼峰']
+		k1 = str.toLowerCase()
+		k2 = str.toUpperCase()
+		k3 = k1.replace(k1[0], k1[0].toUpperCase())
+		return [k1, k2, k3].map((data, i) => ({
+			label: data,
+			description: b[i]
+		}))
 	}
-	return k
 }
 
 /**
@@ -153,7 +138,7 @@ function words(str,type){
  * @param {String} data
  * @param {String} desc 文字信息 
  */
-function sets(type,data,desc){
+function sets(type, data, desc) {
 	hx.workspace.getConfiguration().update(type, data)
 		.then(() => {
 			hx.window.showWarningMessage(desc)

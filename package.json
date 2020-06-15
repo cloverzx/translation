@@ -1,35 +1,23 @@
 {
 	"name": "translation",
-	"description": "plug-in",
-	"version": "0.2.1",
+	"displayName":"翻译插件",
+	"description": "多功能翻译插件",
+	"version": "1.0.1",
 	"publisher": "cloverX",
 	"engines": {
 		"HBuilderX": "^2.7.0"
 	},
-	"categories": [
-		"Other"
-	],
 	"main": "./extension",
 	"activationEvents": [
-		"onCommand:extension.replace",
+		"onCommand:extension.translatereplace",
 		"onCommand:extension.setbaidu",
 		"onCommand:extension.setgoogle",
-		"onCommand:extension.setyoudao",
-		"onCommand:extension.mode1",
-		"onCommand:extension.mode2",
-		"onCommand:extension.mode3",
-		"onCommand:extension.mode4",
-		"onCommand:extension.mode5",
-		"onCommand:extension.mode6",
-		"onCommand:extension.mode7",
-		"onCommand:extension.mode99",
-		"onCommand:extension.mode98"
+		"onCommand:extension.setyoudao"
 	],
 	"contributes": {
-		"commands": [
-			{
-				"command": "extension.replace",
-				"title": "replace 替换内容"
+		"commands": [{
+				"command": "extension.translatereplace",
+				"title": "translatereplace 替换内容"
 			},
 			{
 				"command": "extension.setbaidu",
@@ -42,120 +30,23 @@
 			{
 				"command": "extension.setyoudao",
 				"title": "setYoudao 有道"
-			},
-			{
-				"command": "extension.mode1",
-				"title": "1 大驼峰模式"
-			},
-			{
-				"command": "extension.mode2",
-				"title": "2 小驼峰"
-			},
-			{
-				"command": "extension.mode3",
-				"title": "3 全小写"
-			},
-			{
-				"command": "extension.mode4",
-				"title": "4 全大写"
-			},
-			{
-				"command": "extension.mode5",
-				"title": "5 空格分隔"
-			},
-			{
-				"command": "extension.mode6",
-				"title": "6 横线分隔"
-			},
-			{
-				"command": "extension.mode7",
-				"title": "7 下划线分隔"
-			},
-			{
-				"command": "extension.mode99",
-				"title": "99 拼音"
-			},
-			{
-				"command": "extension.mode98",
-				"title": "98 拼音首字母"
 			}
 		],
 		"menus": {
-			"editor/context": [
-				{
-					"command": "extension.replace",
+			"editor/context": [{
+					"command": "extension.translatereplace",
 					"group": "copy",
-					"title": "翻译并替换",
+					"title": "翻译替换",
 					"when": "editorTextFocus && !activeEditor.readonly"
 				},
 				{
-					"id":"setting",
-					"group": "copy",
-					"title": "模式配置",
-					"when": "editorTextFocus && !activeEditor.readonly"
-				},
-				{
-					"command": "extension.mode1",
-					"group": "setting@2",
-					"title": "大驼峰",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '1'"
-				},
-				{
-					"command": "extension.mode2",
-					"group": "setting@2",
-					"title": "小驼峰",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '2'"
-				},
-				{
-					"command": "extension.mode3",
-					"group": "setting@2",
-					"title": "全小写",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '3'"
-				},
-				{
-					"command": "extension.mode4",
-					"group": "setting@2",
-					"title": "全大写",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '4'"
-				},
-				{
-					"command": "extension.mode5",
-					"group": "setting@2",
-					"title": "空格分隔单词",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '5'"
-				},
-				{
-					"command": "extension.mode6",
-					"group": "setting@2",
-					"title": "横线分隔单词",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '6'"
-				},
-				{
-					"command": "extension.mode7",
-					"group": "setting@2",
-					"title": "下划线分隔单词",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '7'"
-				},
-				{
-					"command": "extension.mode99",
-					"group": "setting@1",
-					"title": "拼音全拼",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '99'"
-				},
-				{
-					"command": "extension.mode98",
-					"group": "setting@1",
-					"title": "拼音首字母",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.mode == '98'"
+					"group": "copy"
+				}
+			],
+			"menubar/tool": [{
+					"id": "setting",
+					"group": "ext_settings",
+					"title": "翻译插件翻译源配置"
 				},
 				{
 					"group": "setting@2"
@@ -164,25 +55,19 @@
 					"command": "extension.setgoogle",
 					"group": "setting@2",
 					"title": "谷歌",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.source == 'google'"
+					"checked": "config.source == 'google'"
 				},
 				{
 					"command": "extension.setbaidu",
 					"group": "setting@2",
 					"title": "百度",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.source == 'baidu'"
+					"checked": "config.source == 'baidu'"
 				},
 				{
 					"command": "extension.setyoudao",
 					"group": "setting@2",
 					"title": "有道",
-					"when": "editorTextFocus && !activeEditor.readonly",
-					"checked":"config.source == 'youdao'"
-				},
-				{
-					"group": "copy"
+					"checked": "config.source == 'youdao'"
 				}
 			]
 		}
