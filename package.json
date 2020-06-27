@@ -1,8 +1,8 @@
 {
 	"name": "translation",
-	"displayName":"翻译插件",
+	"displayName": "翻译插件",
 	"description": "多功能翻译插件",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"publisher": "cloverX",
 	"engines": {
 		"HBuilderX": "^2.7.0"
@@ -15,7 +15,8 @@
 		"onCommand:extension.setyoudao"
 	],
 	"contributes": {
-		"commands": [{
+		"commands": [
+			{
 				"command": "extension.translatereplace",
 				"title": "translatereplace 替换内容"
 			},
@@ -33,7 +34,8 @@
 			}
 		],
 		"menus": {
-			"editor/context": [{
+			"editor/context": [
+				{
 					"command": "extension.translatereplace",
 					"group": "copy",
 					"title": "翻译替换",
@@ -43,7 +45,8 @@
 					"group": "copy"
 				}
 			],
-			"menubar/tool": [{
+			"menubar/tool": [
+				{
 					"id": "setting",
 					"group": "ext_settings",
 					"title": "翻译插件翻译源配置"
@@ -77,6 +80,6 @@
 	],
 	"dependencies": {
 		"chinese-to-pinyin": "^1.3.1",
-		"translation.js": "^0.7.13"
+		"translation.js": "^0.7.15"
 	}
 }

@@ -5,45 +5,68 @@ const {
 	google
 } = require("translation.js"); //引入翻译库
 const pinyin = require("chinese-to-pinyin"); //引入拼音库
+const allLang = ['be', 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'bn', 'bs', 'bg', 'ca', 'ceb', 'zh-CN', 'zh', 'zh-TW',
+	'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha', 'haw',
+	'he', 'iw', 'hi', 'hum', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jv', 'kn', 'kk', 'km', 'rw', 'ko', 'ku', 'ky',
+	'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ny', 'or', 'ps',
+	'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su', 'sw',
+	'sv', 'tl', 'tg', 'ta', 'tt', 'te', 'th', 'tr', 'tk', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu'
+] //语言列表
+
 
 function activate(context) {
 	let replace = hx.commands.registerCommand('extension.translatereplace', () => {
-		const dealWith = async (word, fy) => {
+		const dealWith = async (word, fy, f, type = true) => {
 			const l1 = await new Promise((resolve, reject) => {
-				fy.translate(word).then(result => {
+				fy.translate({
+					'text': word,
+					'from': f,
+					'to': 'en'
+				}).then(result => {
 					resolve(words(result.result[0]))
 				})
 			})
-			const l2 = await new Promise((resolve, reject) => {
-				resolve([{
-					label: pinyin(word, {
-						"removeTone": true,
-						"removeSpace": true
-					}),
-					description: '拼音'
-				}, {
-					label: pinyin(word, {
-						"removeTone": true,
-						"removeSpace": true,
-						"firstCharacter": true
-					}),
-					description: '拼音首字母'
-				}])
-			})
-			return [...l1, ...l2]
-		}
-		const perform = (listArray,editor,selection)=>{
-			const pickResult = hx.window.showQuickPick(listArray, {
-				placeHolder: '选择替换'
-			});
-			pickResult.then(res => {
-				if (!res) {
-					return;
-				}
-				editor.edit(editBuilder=>{
-					editBuilder.replace(selection,res.label)
+			if (type) {
+				const l2 = await new Promise((resolve, reject) => {
+					resolve([{
+						label: pinyin(word, {
+							"removeTone": true,
+							"removeSpace": true
+						}),
+						description: '拼音'
+					}, {
+						label: pinyin(word, {
+							"removeTone": true,
+							"removeSpace": true,
+							"firstCharacter": true
+						}),
+						description: '拼音首字母'
+					}])
 				})
-			})
+				return [...l1, ...l2]
+			} else {
+				return [...l1]
+			}
+		}
+		const perform = (listArray, editor, selection, type = true) => {
+			if (type) {
+				const pickResult = hx.window.showQuickPick(listArray, {
+					placeHolder: '选择替换'
+				});
+				pickResult.then(res => {
+					if (!res) {
+						return;
+					}
+					editor.edit(editBuilder => {
+						editBuilder.replace(selection, res.label)
+					})
+				})
+			} else {
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, listArray)
+				})
+			}
+
 		}
 		let editorPromise = hx.window.getActiveTextEditor();
 		editorPromise.then((editor) => {
@@ -64,21 +87,41 @@ function activate(context) {
 				fy = google
 			}
 			if (word.length > 0) {
-				google.detect(word).then(lang => {
-					if (lang === 'en') {
-						fy.translate(word).then(result => {
-							listArray = [{
-								label: result.result[0],
-								description: '中文翻译'
-							}]
-							perform(listArray,editor,selection)
-						})
-					} else if (['zh', 'zh-CN', 'zh-TW'].includes(lang)) {
-						dealWith(word, fy).then(res => {
-							perform(res,editor,selection)
-						})
+				let a = word.split('-')
+				let [w, to] = [word, null]
+				if (a.length > 1) {
+					let last = a[a.length - 1]
+					if (allLang.includes(last)) {
+						w = a.slice(0, -1).join('-')
+						to = last
 					} else {
-						hx.window.showErrorMessage('仅支持中文和英文!');
+						w = word
+					}
+				} else {
+					w = word
+				}
+				google.detect(w).then(lang => { //检测语言
+					if (allLang.includes(lang)) {
+						let check_is_zh = ['zh', 'zh-CN', 'zh-TW'].includes(lang)
+						if (check_is_zh && (to === null || to === 'en')) { //中->英
+							dealWith(w, fy, lang).then(res => {
+								perform(res, editor, selection)
+							})
+						} else if (!check_is_zh && to === 'en') { //非中->英
+							dealWith(w, fy, lang, false).then(res => {
+								perform(res, editor, selection)
+							})
+						} else { //互相转换
+							fy.translate({
+								'text': w,
+								'from': lang,
+								'to': to === null ? 'zh-CN' : to
+							}).then(result => {
+								perform(result.result[0], editor, selection, false)
+							})
+						}
+					} else {
+						hx.window.showErrorMessage('无法识别的语言!');
 					}
 				})
 			} else {
