@@ -1,8 +1,8 @@
 {
 	"name": "translation",
 	"displayName": "翻译插件",
-	"description": "多功能翻译插件",
-	"version": "1.1.0",
+	"description": "全语种翻译(含拼音)插件",
+	"version": "1.1.2",
 	"publisher": "cloverX",
 	"engines": {
 		"HBuilderX": "^2.7.0"

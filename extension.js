@@ -16,7 +16,9 @@ const allLang = ['be', 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'bn', 'bs', 'bg
 
 function activate(context) {
 	let replace = hx.commands.registerCommand('extension.translatereplace', () => {
+		//转换为英语和拼音
 		const dealWith = async (word, fy, f, type = true) => {
+			//转换为英语生成列表
 			const l1 = await new Promise((resolve, reject) => {
 				fy.translate({
 					'text': word,
@@ -26,6 +28,7 @@ function activate(context) {
 					resolve(words(result.result[0]))
 				})
 			})
+			//根据type类型判定是否需要转换为拼音,并生成列表
 			if (type) {
 				const l2 = await new Promise((resolve, reject) => {
 					resolve([{
@@ -48,6 +51,7 @@ function activate(context) {
 				return [...l1]
 			}
 		}
+		//替换文本
 		const perform = (listArray, editor, selection, type = true) => {
 			if (type) {
 				const pickResult = hx.window.showQuickPick(listArray, {
@@ -66,7 +70,6 @@ function activate(context) {
 					editBuilder.replace(selection, listArray)
 				})
 			}
-
 		}
 		let editorPromise = hx.window.getActiveTextEditor();
 		editorPromise.then((editor) => {
@@ -140,6 +143,7 @@ function activate(context) {
 	});
 }
 
+//处理英语的几个模式
 function words(str) {
 	strs = str.split(" ")
 	if (strs.length > 1) {
