@@ -5,25 +5,22 @@
   >+ 本插件,在于方便开发者,快速转换文本语言或拼音,全语种支持(1.1.0版本后).
   >+ 目前,翻译提供谷歌,百度和有道翻译源,英语模式下提供大驼峰/小驼峰/全大写/全小写/下划线/空格/连接线/转换拼音/转换拼音首字母模式
   >+ 使用了开源库chinese-to-pinyin和translation.js
-  >+ 插件安装地址: https://ext.dcloud.net.cn/plugin?id=2070
-  >+ github地址: https://github.com/cloverzx/translation
+  >+ 插件[安装地址](https://ext.dcloud.net.cn/plugin?id=2070)
+  >+ [github地址](https://github.com/cloverzx/translation)
   >+ 更新日志,放到了changelog.txt
 
 ## 使用教程(一定要看完在使用)
 
-  >1. 前往 https://ext.dcloud.net.cn/plugin?id=2070 安装。
+  >1. 前往 [这里](https://ext.dcloud.net.cn/plugin?id=2070) 安装。
   >2. （重要）**翻译源在 工具->翻译插件设置,默认为谷歌**
-  >3. 您可以根据喜好**自定义快捷键,工具->自定义快捷键** 添加:<u>{"key":"ctrl+shift+q","command":"extension.translatereplace"}</u>
-  >4. **中文默认转换英语,非中文默认转换中文**...如果您需要转换其他语言,请在您的目标内容后添加"-"加语种代码  **格式为:  目标文本-语种代码  ,比如 chinese-ja(转换成日文)或者중국-de(转换成德语)**,详细语种代码见下表
+  >3. 您可以根据喜好**自定义快捷键,工具->自定义快捷键** 追加如下代码:`{"key":"ctrl+shift+q","command":"extension.translatereplace"}`
   
 ## 说明
 
   >1. 选中语言请尽量保证为单一语种,防止识别语种出现问题
-  >2. 右下角的错误消息提示自动消失,等待hbuildX添加API
-  >3. 英语模式下,选择窗口按esc后丢失光标,在处理。
-  >4. 某些语种和英语比较相似,可能识别会产生错误。
+  >2. 1.2版本以后仅有常用的语种,如您有其他
 
-## 语种代码表
+## 语种代码表(1.2版本以后不需要)
 
 |	语言	|	代码|  |	语言	|	代码  | |	语言	|	代码
 |  ----  | ----  |--- | ----  | ----   | ---- | ---- | ---- 
