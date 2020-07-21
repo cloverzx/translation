@@ -88,20 +88,18 @@ function activate(context) {
 				const selectLang = hx.window.showQuickPick(langPick, {
 					placeHolder: '选择语种'
 				});
-				list = new Promise((resolve, reject) => {
-					selectLang.then(result => {
-						if (!result) {
-							return
-						}
-						buildList(result, fy, word).then(list => {
-							const finalWord = hx.window.showQuickPick(list, {
-								placeHolder: '请选择'
-							});
-							finalWord.then(res=>{
-								console.log(res)
-								editor.edit(editBuilder => {
-									editBuilder.replace(selection, res.label)
-								})
+				selectLang.then(result => {
+					if (!result) {
+						return
+					}
+					buildList(result, fy, word).then(list => {
+						const finalWord = hx.window.showQuickPick(list, {
+							placeHolder: '请选择'
+						});
+						finalWord.then(res => {
+							console.log(res)
+							editor.edit(editBuilder => {
+								editBuilder.replace(selection, res.label)
 							})
 						})
 					})
@@ -127,7 +125,7 @@ function buildList(l, fy, str) {
 		if (l.lang === 'zh') {
 			resolve(zhword(fy, str))
 		} else if (l.lang === 'en') {
-			words(fy, str).then(res=>{
+			words(fy, str).then(res => {
 				resolve(res)
 			})
 		} else {
@@ -191,7 +189,10 @@ function words(fy, str) {
 			'text': str,
 			'to': 'en'
 		}).then(result => {
+			console.log(str)
+			console.log(result)
 			strs = result.result[0].split(" ")
+			console.log(strs)
 			if (strs.length > 1) {
 				let [k1, k2, k3, k4, k5, k6, k7] = ['', '', '', '', '', '', '']
 				let b = ['大驼峰', '全小写', '全大写', '小驼峰', '空格连接', '-连接', '_连接']
@@ -211,16 +212,21 @@ function words(fy, str) {
 					label: data,
 					description: b[i]
 				})))
-			} else {
+			} else if(strs.length === 1){
 				let [k1, k2, k3] = ['', '', '']
 				let b = ['小驼峰', '全大写', '大驼峰']
-				k1 = str.toLowerCase()
-				k2 = str.toUpperCase()
+				k1 = strs[0].toLowerCase()
+				k2 = strs[0].toUpperCase()
 				k3 = k1.replace(k1[0], k1[0].toUpperCase())
 				resolve([k1, k2, k3].map((data, i) => ({
 					label: data,
 					description: b[i]
 				})))
+			}else{
+				resolve({
+					label: '暂无翻译,您可尝试更换翻译源',
+					description:'失败'
+				})
 			}
 		})
 	})
