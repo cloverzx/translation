@@ -1,8 +1,8 @@
 {
 	"name": "translation",
-	"displayName": "翻译插件",
+	"displayName": "翻译插件(全新版本2.0来袭)",
 	"description": "全语种翻译(含拼音)插件",
-	"version": "1.2.1",
+	"version": "2.0.0",
 	"publisher": "cloverX",
 	"engines": {
 		"HBuilderX": "^2.7.0"
@@ -10,31 +10,52 @@
 	"main": "./extension",
 	"activationEvents": [
 		"onCommand:extension.translatereplace",
-		"onCommand:extension.setbaidu",
-		"onCommand:extension.setgoogle",
-		"onCommand:extension.setyoudao"
+		"onCommand:extension.translatequickerreplace"
 	],
 	"contributes": {
-		"commands": [
-			{
+		"configuration": {
+			"title": "翻译插件配置",
+			"properties": {
+				"translation.source": {
+					"type": "string",
+					"default": "google",
+					"description": "翻译源",
+					"enum": ["google", "youdao", "baidu"]
+				},
+				"translation.defaultlang": {
+					"type": "string",
+					"default": "en",
+					"description": "默认翻译",
+					"enum": ["py", "szm", "dt", "xt", "xx", "dx", "en1", "en2", "en3", "en", "zh-CN", "zh", "zh-TW", "ja", "de", "ko",
+						"fr", "be", "af", "sq", "am", "ar", "hy", "az", "eu",
+						"bn", "bs", "bg", "ca", "ceb",
+						"co", "hr", "cs", "da", "nl", "eo", "et", "fi", "fy", "gl", "ka", "el", "gu", "ht", "ha",
+						"haw", "he", "iw", "hi", "hum", "hu", "is", "ig", "id", "ga", "it", "jv", "kn", "kk", "km", "rw",
+						"ku",
+						"ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "or",
+						"ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su",
+						"sw", "sv", "tl", "tg", "ta", "tt", "te", "th", "tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "yo",
+						"zu"
+					]
+				}
+			}
+		},
+		"commands": [{
 				"command": "extension.translatereplace",
 				"title": "translatereplace 替换内容"
 			},
 			{
-				"command": "extension.setbaidu",
-				"title": "setBaidu 百度"
-			},
-			{
-				"command": "extension.setgoogle",
-				"title": "setGoogle 谷歌"
-			},
-			{
-				"command": "extension.setyoudao",
-				"title": "setYoudao 有道"
+				"command": "extension.translatequickerreplace",
+				"title": "translatequickerreplace 快速翻译"
 			}
 		],
 		"menus": {
-			"editor/context": [
+			"editor/context": [{
+					"command": "extension.translatequickerreplace",
+					"group": "copy",
+					"title": "快速翻译(后加:-语种代码,或配置默认)",
+					"when": "editorTextFocus && !activeEditor.readonly"
+				},
 				{
 					"command": "extension.translatereplace",
 					"group": "copy",
@@ -43,34 +64,6 @@
 				},
 				{
 					"group": "copy"
-				}
-			],
-			"menubar/tool": [
-				{
-					"id": "setting",
-					"group": "ext_settings",
-					"title": "翻译插件翻译源配置"
-				},
-				{
-					"group": "setting@2"
-				},
-				{
-					"command": "extension.setgoogle",
-					"group": "setting@2",
-					"title": "谷歌",
-					"checked": "config.source == 'google'"
-				},
-				{
-					"command": "extension.setbaidu",
-					"group": "setting@2",
-					"title": "百度",
-					"checked": "config.source == 'baidu'"
-				},
-				{
-					"command": "extension.setyoudao",
-					"group": "setting@2",
-					"title": "有道",
-					"checked": "config.source == 'youdao'"
 				}
 			]
 		}

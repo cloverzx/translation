@@ -5,14 +5,16 @@ const {
 	google
 } = require("translation.js"); //引入翻译库
 const pinyin = require("chinese-to-pinyin"); //引入拼音库
-// const allLang = ['be', 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'bn', 'bs', 'bg', 'ca', 'ceb', 'zh-CN', 'zh', 'zh-TW',
-// 	'tw', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha',
-// 	'haw', 'he', 'iw', 'hi', 'hum', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jv', 'kn', 'kk', 'km', 'rw', 'ko', 'ku',
-// 	'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ny', 'or',
-// 	'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su',
-// 	'sw', 'sv', 'tl', 'tg', 'ta', 'tt', 'te', 'th', 'tr', 'tk', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo',
-// 	'zu'
-// ] //语言列表
+const allLang = ['be', 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'bn', 'bs', 'bg', 'ca', 'ceb', 'zh-CN', 'zh', 'zh-TW',
+	'tw', 'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'fi', 'fr', 'fy', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha',
+	'haw', 'he', 'iw', 'hi', 'hum', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jv', 'kn', 'kk', 'km', 'rw', 'ko', 'ku',
+	'ky', 'lo', 'la', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ny', 'or',
+	'ps', 'fa', 'pl', 'pt', 'pa', 'ro', 'ru', 'sm', 'gd', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su',
+	'sw', 'sv', 'tl', 'tg', 'ta', 'tt', 'te', 'th', 'tr', 'tk', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo',
+	'zu'
+] //语言列表
+const otherModeZh = ['py', 'szm']
+const otherModeEn = ['dt', 'xt', 'xx', 'dx', 'en1', 'en2', 'en3']
 
 const langPick = [{
 	label: '简体/繁体/拼音',
@@ -70,20 +72,12 @@ function activate(context) {
 		editorPromise.then((editor) => {
 			let selection = editor.selection;
 			let word = editor.document.getText(selection);
-			let config = hx.workspace.getConfiguration();
-			let source = config.get("source", false);
-			let fy = google;
+			let config = hx.workspace.getConfiguration('translation');
+			let source = config.get("source", 'google');
+			if (source === 'google') fy = google
+			if (source === 'baidu') fy = baidu
+			if (source === 'youdao') fy = youdao
 			let listArray = []
-			if (source === "baidu") {
-				fy = baidu;
-			} else if (source === "google") {
-				fy = google;
-			} else if (source === "youdao") {
-				fy = youdao;
-			} else {
-				config.update("source", "google")
-				fy = google
-			}
 			if (word.length > 0) {
 				const selectLang = hx.window.showQuickPick(langPick, {
 					placeHolder: '选择语种'
@@ -97,7 +91,6 @@ function activate(context) {
 							placeHolder: '请选择'
 						});
 						finalWord.then(res => {
-							console.log(res)
 							editor.edit(editBuilder => {
 								editBuilder.replace(selection, res.label)
 							})
@@ -109,15 +102,98 @@ function activate(context) {
 			}
 		})
 	});
-	let setbaidu = hx.commands.registerCommand('extension.setbaidu', () => {
-		sets("source", "baidu", "切换到百度翻译源成功!")
-	});
-	let setyoudao = hx.commands.registerCommand('extension.setyoudao', () => {
-		sets("source", "youdao", "切换到有道翻译源成功!")
-	});
-	let setgoogle = hx.commands.registerCommand('extension.setgoogle', () => {
-		sets("source", "google", "切换到谷歌翻译源成功!")
-	});
+
+	let quickerreplace = hx.commands.registerCommand('extension.translatequickerreplace', () => {
+		let editorPromise = hx.window.getActiveTextEditor();
+		editorPromise.then((editor) => {
+			let selection = editor.selection;
+			let word = editor.document.getText(selection);
+			let config = hx.workspace.getConfiguration('translation');
+			let source = config.get("source", 'google');
+			if (source === 'google') fy = google
+			if (source === 'baidu') fy = baidu
+			if (source === 'youdao') fy = youdao
+			let defaultlang = config.get("defaultlang", 'en');
+			let replaceword = (w) => {
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, w)
+				})
+			}
+			if (word.length > 0) {
+				let a = word.split('-')
+				let alength = a.length
+				if (alength > 1) {
+					if (allLang.includes(a[alength - 1])) {
+						let bl = a[alength - 1] !== 'tw' ? a[alength - 1] : "zh-TW"
+						fystr(fy, a.slice(0, -1).join('-'), a[alength - 1]).then(res => {
+							replaceword(res)
+						})
+					} else if (otherModeZh.includes(a[alength - 1])) {
+						zhword(fy, a.slice(0, -1).join('-')).then(res1 => {
+							if (a[alength - 1] === 'py') {
+								replaceword(res1[2]['label'])
+							}
+							if (a[alength - 1] === 'szm') {
+								replaceword(res1[3]['label'])
+							}
+						})
+					} else if (otherModeEn.includes(a[alength - 1])) {
+						words(fy, a.slice(0, -1).join('-')).then(res1 => {
+							if (a[alength - 1] === 'dt') {
+								if (res1.length > 3) {
+									replaceword(res1[0]['label'])
+								} else {
+									replaceword(res1[2]['label'])
+								}
+							} else if (a[alength - 1] === 'xt') {
+								if (res1.length > 3) {
+									replaceword(res1[3]['label'])
+								} else {
+									replaceword(res1[0]['label'])
+								}
+							} else if (a[alength - 1] === 'xx') {
+								if (res1.length > 3) {
+									replaceword(res1[1]['label'])
+								} else {
+									replaceword(res1[0]['label'])
+								}
+							} else if (a[alength - 1] === 'dx') {
+								if (res1.length > 3) {
+									replaceword(res1[2]['label'])
+								} else {
+									replaceword(res1[1]['label'])
+								}
+							} else if (a[alength - 1] === 'en1') {
+								if (res1.length > 3) {
+									replaceword(res1[4]['label'])
+								} else {
+									replaceword(res1[0]['label'])
+								}
+							} else if (a[alength - 1] === 'en2') {
+								if (res1.length > 3) {
+									replaceword(res1[5]['label'])
+								} else {
+									replaceword(res1[0]['label'])
+								}
+							} else if (a[alength - 1] === 'en3') {
+								if (res1.length > 3) {
+									replaceword(res1[6]['label'])
+								} else {
+									replaceword(res1[0]['label'])
+								}
+							}
+						})
+					}
+				} else {
+					fystr(fy, word, defaultlang).then(res => {
+						replaceword(res)
+					})
+				}
+			} else {
+				hx.window.showErrorMessage('未选取内容!');
+			}
+		})
+	})
 }
 //生成列表
 function buildList(l, fy, str) {
@@ -192,7 +268,6 @@ function words(fy, str) {
 			console.log(str)
 			console.log(result)
 			strs = result.result[0].split(" ")
-			console.log(strs)
 			if (strs.length > 1) {
 				let [k1, k2, k3, k4, k5, k6, k7] = ['', '', '', '', '', '', '']
 				let b = ['大驼峰', '全小写', '全大写', '小驼峰', '空格连接', '-连接', '_连接']
@@ -212,7 +287,7 @@ function words(fy, str) {
 					label: data,
 					description: b[i]
 				})))
-			} else if(strs.length === 1){
+			} else if (strs.length === 1) {
 				let [k1, k2, k3] = ['', '', '']
 				let b = ['小驼峰', '全大写', '大驼峰']
 				k1 = strs[0].toLowerCase()
@@ -222,31 +297,14 @@ function words(fy, str) {
 					label: data,
 					description: b[i]
 				})))
-			}else{
+			} else {
 				resolve({
 					label: '暂无翻译,您可尝试更换翻译源',
-					description:'失败'
+					description: '失败'
 				})
 			}
 		})
 	})
-}
-
-/**
- * 设置配置,给予反馈
- * @description 设置配置,给予反馈
- * @param {Number} type 
- * @param {String} data
- * @param {String} desc 文字信息 
- */
-function sets(type, data, desc) {
-	hx.workspace.getConfiguration().update(type, data)
-		.then(() => {
-			hx.window.showWarningMessage(desc)
-		})
-		.catch(() => {
-			hx.window.showWarningMessage("设置失败!")
-		});
 }
 
 // function deactivate() {
