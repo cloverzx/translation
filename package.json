@@ -1,11 +1,11 @@
 {
 	"name": "translation",
-	"displayName": "翻译插件(全新版本2.0来袭)",
+	"displayName": "翻译插件(全新版本2.0)",
 	"description": "全语种翻译(含拼音)插件",
-	"version": "2.0.0",
+	"version": "2.0.2",
 	"publisher": "cloverX",
 	"engines": {
-		"HBuilderX": "^2.7.0"
+		"HBuilderX": "^2.7.12"
 	},
 	"main": "./extension",
 	"activationEvents": [

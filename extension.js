@@ -83,9 +83,7 @@ function activate(context) {
 					placeHolder: '选择语种'
 				});
 				selectLang.then(result => {
-					if (!result) {
-						return
-					}
+					if (!result) return
 					buildList(result, fy, word).then(list => {
 						const finalWord = hx.window.showQuickPick(list, {
 							placeHolder: '请选择'
@@ -130,57 +128,25 @@ function activate(context) {
 						})
 					} else if (otherModeZh.includes(a[alength - 1])) {
 						zhword(fy, a.slice(0, -1).join('-')).then(res1 => {
-							if (a[alength - 1] === 'py') {
-								replaceword(res1[2]['label'])
-							}
-							if (a[alength - 1] === 'szm') {
-								replaceword(res1[3]['label'])
-							}
+							if (a[alength - 1] === 'py') replaceword(res1[2]['label'])
+							if (a[alength - 1] === 'szm') replaceword(res1[3]['label'])
 						})
 					} else if (otherModeEn.includes(a[alength - 1])) {
 						words(fy, a.slice(0, -1).join('-')).then(res1 => {
 							if (a[alength - 1] === 'dt') {
-								if (res1.length > 3) {
-									replaceword(res1[0]['label'])
-								} else {
-									replaceword(res1[2]['label'])
-								}
+								res1.length > 3 ? replaceword(res1[0]['label']) : replaceword(res1[2]['label'])
 							} else if (a[alength - 1] === 'xt') {
-								if (res1.length > 3) {
-									replaceword(res1[3]['label'])
-								} else {
-									replaceword(res1[0]['label'])
-								}
+								res1.length > 3 ? replaceword(res1[3]['label']) : replaceword(res1[0]['label'])
 							} else if (a[alength - 1] === 'xx') {
-								if (res1.length > 3) {
-									replaceword(res1[1]['label'])
-								} else {
-									replaceword(res1[0]['label'])
-								}
+								res1.length > 3 ? replaceword(res1[1]['label']) : replaceword(res1[0]['label'])
 							} else if (a[alength - 1] === 'dx') {
-								if (res1.length > 3) {
-									replaceword(res1[2]['label'])
-								} else {
-									replaceword(res1[1]['label'])
-								}
+								res1.length > 3 ? replaceword(res1[2]['label']) : replaceword(res1[1]['label'])
 							} else if (a[alength - 1] === 'en1') {
-								if (res1.length > 3) {
-									replaceword(res1[4]['label'])
-								} else {
-									replaceword(res1[0]['label'])
-								}
+								res1.length > 3 ? replaceword(res1[4]['label']) : replaceword(res1[0]['label'])
 							} else if (a[alength - 1] === 'en2') {
-								if (res1.length > 3) {
-									replaceword(res1[5]['label'])
-								} else {
-									replaceword(res1[0]['label'])
-								}
+								res1.length > 3 ? replaceword(res1[5]['label']) : replaceword(res1[0]['label'])
 							} else if (a[alength - 1] === 'en3') {
-								if (res1.length > 3) {
-									replaceword(res1[6]['label'])
-								} else {
-									replaceword(res1[0]['label'])
-								}
+								res1.length > 3 ? replaceword(res1[6]['label']) : replaceword(res1[0]['label'])
 							}
 						})
 					}
