@@ -160,6 +160,202 @@ function activate(context) {
 			}
 		})
 	})
+
+	//中英
+	let translatezhen = hx.commands.registerCommand('extension.translatezhen', () => {
+		let editorPromise = hx.window.getActiveTextEditor();
+		editorPromise.then((editor) => {
+			let selection = editor.selection;
+			let word = editor.document.getText(selection);
+			let config = hx.workspace.getConfiguration('translation');
+			let source = config.get("source", 'google');
+			if (source === 'google') fy = google
+			if (source === 'baidu') fy = baidu
+			if (source === 'youdao') fy = youdao
+			let replaceword = (w) => {
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, w)
+				})
+			}
+			if (word.length > 0) {
+				checklang(word).then(res => {
+					if (['zh', 'zh-CN', 'en'].includes(res)) {
+						if (res === 'en') {
+							fystr(fy, word, 'zh').then(res1 => {
+								replaceword(res1)
+							})
+						}
+						if (['zh', 'zh-CN'].includes(res)) {
+							fystr(fy, word, 'en').then(res1 => {
+								replaceword(res1)
+							})
+						}
+					} else {
+						hx.window.showErrorMessage('当前选中词不是中文或英文!');
+					}
+				})
+			} else {
+				hx.window.showErrorMessage('未选取内容!');
+			}
+		})
+	})
+	//中日
+	let translatezhja = hx.commands.registerCommand('extension.translatezhja', () => {
+		let editorPromise = hx.window.getActiveTextEditor();
+		editorPromise.then((editor) => {
+			let selection = editor.selection;
+			let word = editor.document.getText(selection);
+			let config = hx.workspace.getConfiguration('translation');
+			let source = config.get("source", 'google');
+			if (source === 'google') fy = google
+			if (source === 'baidu') fy = baidu
+			if (source === 'youdao') fy = youdao
+			let replaceword = (w) => {
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, w)
+				})
+			}
+			if (word.length > 0) {
+				checklang(word).then(res => {
+					if (['zh', 'zh-CN', 'ja'].includes(res)) {
+						if (res === 'ja') {
+							fystr(fy, word, 'zh').then(res1 => {
+								replaceword(res1)
+							})
+						}
+						if (['zh', 'zh-CN'].includes(res)) {
+							fystr(fy, word, 'ja').then(res1 => {
+								replaceword(res1)
+							})
+						}
+					} else {
+						hx.window.showErrorMessage('当前选中词不是中文或日文!');
+					}
+
+				})
+			} else {
+				hx.window.showErrorMessage('未选取内容!');
+			}
+		})
+	})
+
+	//中韩
+	let translatezhko = hx.commands.registerCommand('extension.translatezhko', () => {
+		let editorPromise = hx.window.getActiveTextEditor();
+		editorPromise.then((editor) => {
+			let selection = editor.selection;
+			let word = editor.document.getText(selection);
+			let config = hx.workspace.getConfiguration('translation');
+			let source = config.get("source", 'google');
+			if (source === 'google') fy = google
+			if (source === 'baidu') fy = baidu
+			if (source === 'youdao') fy = youdao
+			let replaceword = (w) => {
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, w)
+				})
+			}
+			if (word.length > 0) {
+				checklang(word).then(res => {
+					if (['zh', 'zh-CN', 'ko'].includes(res)) {
+						if (res === 'ko') {
+							fystr(fy, word, 'zh').then(res1 => {
+								replaceword(res1)
+							})
+						}
+						if (['zh', 'zh-CN'].includes(res)) {
+							fystr(fy, word, 'ko').then(res1 => {
+								replaceword(res1)
+							})
+						}
+					} else {
+						hx.window.showErrorMessage('当前选中词不是中文或韩文!');
+					}
+
+				})
+			} else {
+				hx.window.showErrorMessage('未选取内容!');
+			}
+		})
+	})
+	//中法
+	let translatezhfr = hx.commands.registerCommand('extension.translatezhfr', () => {
+		let editorPromise = hx.window.getActiveTextEditor();
+		editorPromise.then((editor) => {
+			let selection = editor.selection;
+			let word = editor.document.getText(selection);
+			let config = hx.workspace.getConfiguration('translation');
+			let source = config.get("source", 'google');
+			if (source === 'google') fy = google
+			if (source === 'baidu') fy = baidu
+			if (source === 'youdao') fy = youdao
+			let replaceword = (w) => {
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, w)
+				})
+			}
+			if (word.length > 0) {
+				checklang(word).then(res => {
+					if (['zh', 'zh-CN', 'fr'].includes(res)) {
+						if (res === 'fr') {
+							fystr(fy, word, 'zh').then(res1 => {
+								replaceword(res1)
+							})
+						}
+						if (['zh', 'zh-CN'].includes(res)) {
+							fystr(fy, word, 'fr').then(res1 => {
+								replaceword(res1)
+							})
+						}
+					} else {
+						hx.window.showErrorMessage('当前选中词不是中文或法文!');
+					}
+
+				})
+			} else {
+				hx.window.showErrorMessage('未选取内容!');
+			}
+		})
+	})
+	//中德
+	let translatezhde = hx.commands.registerCommand('extension.translatezhde', () => {
+		let editorPromise = hx.window.getActiveTextEditor();
+		editorPromise.then((editor) => {
+			let selection = editor.selection;
+			let word = editor.document.getText(selection);
+			let config = hx.workspace.getConfiguration('translation');
+			let source = config.get("source", 'google');
+			if (source === 'google') fy = google
+			if (source === 'baidu') fy = baidu
+			if (source === 'youdao') fy = youdao
+			let replaceword = (w) => {
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, w)
+				})
+			}
+			if (word.length > 0) {
+				checklang(word).then(res => {
+					if (['zh', 'zh-CN', 'de'].includes(res)) {
+						if (res === 'en') {
+							fystr(fy, word, 'zh').then(res1 => {
+								replaceword(res1)
+							})
+						}
+						if (['zh', 'zh-CN'].includes(res)) {
+							fystr(fy, word, 'de').then(res1 => {
+								replaceword(res1)
+							})
+						}
+					} else {
+						hx.window.showErrorMessage('当前选中词不是中文或德文!');
+					}
+
+				})
+			} else {
+				hx.window.showErrorMessage('未选取内容!');
+			}
+		})
+	})
 }
 //生成列表
 function buildList(l, fy, str) {
@@ -189,6 +385,8 @@ function fystr(fy, str, lang) {
 			'to': lang
 		}).then(result => {
 			resolve(result.result[0])
+		}).catch(error => {
+			error(error.code)
 		})
 	})
 }
@@ -269,13 +467,53 @@ function words(fy, str) {
 					description: '失败'
 				})
 			}
+		}).catch(error => {
+			error(error.code)
 		})
 	})
 }
 
+function checklang(text) {
+	return new Promise((resolve, reject) => {
+		google.detect(text).then(result => {
+			resolve(result)
+		}).catch(error => {
+			error(error.code)
+		})
+	})
+}
+
+function error(errorCode) {
+	let mes = "发生错误！"
+	if (errorCode === 'NETWORK_ERROR') {
+		mes = '网络错误，可能是运行环境没有网络连接造成的'
+	}
+	if (errorCode === 'API_SERVER_ERROR') {
+		mes = '翻译接口返回了错误的数据'
+	}
+	if (errorCode === 'UNSUPPORTED_LANG') {
+		mes = '接口不支持的语种'
+	}
+	if (errorCode === 'NETWORK_TIMEOUT') {
+		mes = '查询接口时超时了'
+	}
+	hx.window.showErrorMessage(mes);
+}
+
+
+
+
+
+// "onCommand:extension.translatezhen",
+// 		"onCommand:extension.translatezhja",
+// 		"onCommand:extension.translatezhko",
+// 		"onCommand:extension.translatezhfr",
+// 		"onCommand:extension.translatezhde"
+
 // function deactivate() {
 
 // }
+
 module.exports = {
 	activate
 }

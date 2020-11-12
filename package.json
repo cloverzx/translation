@@ -1,16 +1,21 @@
 {
 	"name": "translation",
-	"displayName": "翻译插件(全新版本2.0)",
+	"displayName": "便捷翻译插件",
 	"description": "全语种翻译(含拼音)插件",
-	"version": "2.0.2",
+	"version": "2.2.1",
 	"publisher": "cloverX",
 	"engines": {
-		"HBuilderX": "^2.7.12"
+		"HBuilderX": "^2.7.0"
 	},
 	"main": "./extension",
 	"activationEvents": [
 		"onCommand:extension.translatereplace",
-		"onCommand:extension.translatequickerreplace"
+		"onCommand:extension.translatequickerreplace",
+		"onCommand:extension.translatezhen",
+		"onCommand:extension.translatezhja",
+		"onCommand:extension.translatezhko",
+		"onCommand:extension.translatezhfr",
+		"onCommand:extension.translatezhde"
 	],
 	"contributes": {
 		"configuration": {
@@ -20,7 +25,7 @@
 					"type": "string",
 					"default": "google",
 					"description": "翻译源",
-					"enum": ["google", "youdao", "baidu"]
+					"enum": ["google"]
 				},
 				"translation.defaultlang": {
 					"type": "string",
@@ -47,6 +52,26 @@
 			{
 				"command": "extension.translatequickerreplace",
 				"title": "translatequickerreplace 快速翻译"
+			},
+			{
+				"command": "extension.translatezhen",
+				"title": "translatezhen 中英"
+			},
+			{
+				"command": "extension.translatezhja",
+				"title": "translatezhja 中日"
+			},
+			{
+				"command": "extension.translatezhko",
+				"title": "translatezhko 中韩"
+			},
+			{
+				"command": "extension.translatezhfr",
+				"title": "translatezhfr 中法"
+			},
+			{
+				"command": "extension.translatezhde",
+				"title": "translatezhde 中德"
 			}
 		],
 		"menus": {
